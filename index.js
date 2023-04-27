@@ -15,6 +15,11 @@ function createDom() {
   const keyboard = document.createElement('div');
   keyboard.setAttribute('class', 'keyboard');
   mainContainer.appendChild(keyboard);
+  
+  const notes = document.createElement('p');
+    notes.setAttribute('class', 'notes');
+    notes.innerHTML = 'Создано на ОС Windows <br> Для смены языка используйте левые ctrl+ alt';
+    mainContainer.appendChild(notes);
 
   for (let i = 1; i < 6; i++) {
     const line = document.createElement('div');
