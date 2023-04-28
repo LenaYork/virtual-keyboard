@@ -339,8 +339,8 @@ const ENGLINES = [
       },
       {
           'type': 'letter',
-          'initial': 'spb',
-          'shifted': 'spb',
+          'initial': ' ',
+          'shifted': ' ',
       },
       {
           'type': 'non-letter',
@@ -674,8 +674,8 @@ const RULINES =
         },
         {
             'type': 'letter',
-            'initial': 'spb',
-            'shifted': 'spb',
+            'initial': ' ',
+            'shifted': ' ',
         },
         {
             'type': 'non-letter',
@@ -736,7 +736,7 @@ function createKeys(line, number) {
               newEl.classList.add("arrow");
               break;
 
-      case (elText.innerHTML.includes("spb")):
+      case (elText.innerHTML.includes(" ")):
             newEl.classList.add("spb");
             elText.innerHTML = " ";
             break;
@@ -751,7 +751,6 @@ ENGLINES.forEach( (elem, index) => createKeys(elem, index+1));
 // RULINES.forEach( (elem, index) => createKeys(elem, index+1));
 
 function typeALetter(event) {
-  console.log(event.target.id);
   if (event.target.classList.contains("letter")) {
       displayedText += event.target.id;
   } else {
@@ -761,5 +760,15 @@ function typeALetter(event) {
 }
 
 function doCommand(event) {
-  console.log(event.target.id);
+  if (event.target.classList.contains("non-letter")) {
+    if (event.target.classList.contains("arrow")) {
+      displayedText += event.target.id
+    }
+    
+  } else {
+    if (event.target.parentNode.classList.contains("arrow")) {
+      displayedText += event.target.innerHTML;
+    }
+  }
+document.querySelector(".screen").value = displayedText;
 }
