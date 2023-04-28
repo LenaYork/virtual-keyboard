@@ -760,9 +760,15 @@ function typeALetter(event) {
 }
 
 function doCommand(event) {
+
+  if (event.target.classList.contains("tab") 
+      || event.target.parentNode.classList.contains("tab")) {
+        displayedText += '    ';
+    }
+
   if (event.target.classList.contains("non-letter")) {
     if (event.target.classList.contains("arrow")) {
-      displayedText += event.target.id
+      displayedText += event.target.id;
     }
     
   } else {
