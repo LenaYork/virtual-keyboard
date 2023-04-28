@@ -134,7 +134,7 @@ const ENGLINES = [
       {
           'type': 'letter',
           'initial': 'r',
-          'shifted': 'T',
+          'shifted': 'R',
       },
       {
           'type': 'letter',
@@ -749,3 +749,17 @@ function createKeys(line, number) {
 
 ENGLINES.forEach( (elem, index) => createKeys(elem, index+1));
 // RULINES.forEach( (elem, index) => createKeys(elem, index+1));
+
+function typeALetter(event) {
+  console.log(event.target.id);
+  if (event.target.classList.contains("letter")) {
+      displayedText += event.target.id;
+  } else {
+      displayedText += event.target.parentNode.id;
+  }
+  document.querySelector(".screen").value = displayedText;
+}
+
+function doCommand(event) {
+  console.log(event.target.id);
+}
