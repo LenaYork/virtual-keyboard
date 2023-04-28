@@ -1,7 +1,19 @@
-let pageLanguage = 'eng';
+let currentLanguage = 'ru';
 let isShifted = false;
 
 let displayedText = '';
+
+function createKeyboardWithLines() {
+  const keyboard = document.createElement('div');
+  keyboard.setAttribute('class', 'keyboard');
+
+  for (let i = 1; i < 6; i++) {
+    const line = document.createElement('div');
+    line.setAttribute('class', `line line${i}`);
+    keyboard.appendChild(line);
+  }
+  return keyboard;
+}
 
 function createDom() {
   const mainContainer = document.createElement('main');
@@ -17,20 +29,13 @@ function createDom() {
   screen.setAttribute('class', 'screen');
   mainContainer.appendChild(screen);
 
-  const keyboard = document.createElement('div');
-  keyboard.setAttribute('class', 'keyboard');
-  mainContainer.appendChild(keyboard);
+  mainContainer.appendChild(createKeyboardWithLines());
   
   const notes = document.createElement('p');
     notes.setAttribute('class', 'notes');
     notes.innerHTML = 'Создано на ОС Windows <br> Для смены языка используйте левые ctrl+ alt';
     mainContainer.appendChild(notes);
 
-  for (let i = 1; i < 6; i++) {
-    const line = document.createElement('div');
-    line.setAttribute('class', `line line${i}`);
-    keyboard.appendChild(line);
-  }
 }
 
 createDom();
@@ -747,7 +752,26 @@ function createKeys(line, number) {
   } )
 }
 
-ENGLINES.forEach( (elem, index) => createKeys(elem, index+1));
+function mapKeys(currentLanguage) {
+  let currentKeysSet = currentLanguage === "eng" ? ENGLINES : RULINES;
+  console.log(".............",currentKeysSet)
+  let keyboardContainer = document.querySelector(".keyboard");
+  if (keyboardContainer) {
+    // keyboardContainer.innerHTML = "";
+    // while (keyboardContainer.firstChild) {
+    //   keyboardContainer.removeChild(keyboardContainer.firstElementChild);
+    // }
+    document.querySelector(".main").removeChild(keyboardContainer);
+
+    document.querySelector(".screen").after(createKeyboardWithLines());
+
+  }
+  currentKeysSet.forEach( (elem, index) => createKeys(elem, index+1));
+}
+
+mapKeys(currentLanguage);
+
+// ENGLINES.forEach( (elem, index) => createKeys(elem, index+1));
 // RULINES.forEach( (elem, index) => createKeys(elem, index+1));
 
 function typeALetter(event) {
@@ -761,9 +785,17 @@ function typeALetter(event) {
 
 function doCommand(event) {
 
+  //tab button
   if (event.target.classList.contains("tab") 
       || event.target.parentNode.classList.contains("tab")) {
         displayedText += '    ';
+    }
+
+  //capslock button
+  if (event.target.id === "CapsLock" 
+      || event.target.parentNode.id === "CapsLock") {
+        isShifted =!isShifted;
+        mapKeys(currentLanguage);
     }
 
   if (event.target.classList.contains("non-letter")) {
