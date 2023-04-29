@@ -710,6 +710,11 @@ const RULINES =
     ]
 ]
 
+function mapShiftedKeys() {
+  isShifted = !isShifted;
+  mapKeys();
+}
+
 function createKeys(line, number) {
   line.forEach( elem => {
     let newEl = document.createElement("div");
@@ -721,6 +726,10 @@ function createKeys(line, number) {
 
     if (elem.type.includes("non-letter")) {
       newEl.addEventListener("click", doCommand);
+      if (elem.initial === "Shift") {
+        newEl.addEventListener("mousedown", mapShiftedKeys);
+        newEl.addEventListener("mouseup", mapShiftedKeys);
+      }
     } else newEl.addEventListener("click", typeALetter);
 
     switch(true) {
@@ -752,9 +761,8 @@ function createKeys(line, number) {
   } )
 }
 
-function mapKeys(currentLanguage) {
+function mapKeys() {
   let currentKeysSet = currentLanguage === "eng" ? ENGLINES : RULINES;
-  console.log(".............",currentKeysSet)
   let keyboardContainer = document.querySelector(".keyboard");
   if (keyboardContainer) {
     // keyboardContainer.innerHTML = "";
@@ -769,7 +777,7 @@ function mapKeys(currentLanguage) {
   currentKeysSet.forEach( (elem, index) => createKeys(elem, index+1));
 }
 
-mapKeys(currentLanguage);
+mapKeys();
 
 // ENGLINES.forEach( (elem, index) => createKeys(elem, index+1));
 // RULINES.forEach( (elem, index) => createKeys(elem, index+1));
@@ -795,7 +803,7 @@ function doCommand(event) {
   if (event.target.id === "CapsLock" 
       || event.target.parentNode.id === "CapsLock") {
         isShifted =!isShifted;
-        mapKeys(currentLanguage);
+        mapKeys();
     }
 
   //backspace button
