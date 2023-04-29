@@ -104,7 +104,11 @@
     transition: background-color 0.5s, transform 0.2s;
 } 
 
-.shift {
+.non-letter-active {
+    background-color: #37ea37;
+}
+
+.shift, .enter {
     width: 80px;
 }
 

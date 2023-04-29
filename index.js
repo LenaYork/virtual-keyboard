@@ -733,8 +733,11 @@ function createKeys(line, number) {
     } else newEl.addEventListener("click", typeALetter);
 
     switch(true) {
-      case (elText.innerHTML.toLowerCase().includes("shift") 
-              || elText.innerHTML.includes("Enter")):
+      case (elText.innerHTML.includes("Enter")):
+              newEl.classList.add("enter");
+              break;
+
+      case (elText.innerHTML.includes("Shift")):
               newEl.classList.add("shift");
               break;
 
@@ -804,6 +807,9 @@ function doCommand(event) {
       || event.target.parentNode.id === "CapsLock") {
         isShifted =!isShifted;
         mapKeys();
+        if (isShifted) {
+          document.querySelector("#CapsLock").classList.add("non-letter-active");
+        } else document.querySelector("#CapsLock").classList.remove("non-letter-active");
     }
 
   //backspace button
