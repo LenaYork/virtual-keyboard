@@ -1,4 +1,4 @@
-let currentLanguage = 'ru';
+let currentLanguage = 'eng';
 let isShifted = false;
 
 let displayedText = '';
@@ -796,6 +796,13 @@ function doCommand(event) {
       || event.target.parentNode.id === "CapsLock") {
         isShifted =!isShifted;
         mapKeys(currentLanguage);
+    }
+
+  //backspace button
+  if (event.target.id === "Backspace" 
+      || event.target.innerHTML === "Backspace") {
+        let cutString = displayedText.slice(0, -1);
+        displayedText = cutString;
     }
 
   if (event.target.classList.contains("non-letter")) {
