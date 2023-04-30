@@ -1,4 +1,4 @@
-let currentLanguage = 'eng';
+let currentLanguage =  localStorage.getItem("language") ?? 'eng';
 let isShifted = false;
 
 let displayedText = '';
@@ -831,3 +831,12 @@ function doCommand(event) {
   }
 document.querySelector(".screen").value = displayedText;
 }
+
+document.addEventListener('keydown', function(event) {
+  if (event.ctrlKey && event.altKey) {
+    console.log('Строка для вывода в консоль');
+		currentLanguage = currentLanguage === "eng" ? "ru" : "eng";
+		mapKeys();
+		localStorage.setItem("language", currentLanguage);
+  }
+});
