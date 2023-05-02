@@ -188,8 +188,8 @@ const ENGLINES = [
       },
       {
           'type': 'non-letter',
-          'initial': 'Del',
-          'shifted': 'Del',
+          'initial': 'Delete',
+          'shifted': 'Delete',
       },
   ],
   [
@@ -329,8 +329,8 @@ const ENGLINES = [
   [
       {
           'type': 'non-letter',
-          'initial': 'Ctrl',
-          'shifted': 'Ctrl',
+          'initial': 'Control',
+          'shifted': 'Control',
       },
       {
           'type': 'non-letter',
@@ -344,8 +344,8 @@ const ENGLINES = [
       },
       {
           'type': 'letter',
-          'initial': ' ',
-          'shifted': ' ',
+          'initial': 'spb',
+          'shifted': 'spb',
       },
       {
           'type': 'non-letter',
@@ -369,8 +369,8 @@ const ENGLINES = [
       },
       {
           'type': 'non-letter',
-          'initial': 'Ctrl',
-          'shifted': 'Ctrl',
+          'initial': 'Control',
+          'shifted': 'Control',
       },
   ]
 ]
@@ -523,8 +523,8 @@ const RULINES =
         },
         {
             'type': 'non-letter',
-            'initial': 'Del',
-            'shifted': 'Del',
+            'initial': 'Delete',
+            'shifted': 'Delete',
         },
     ],
     [
@@ -664,8 +664,8 @@ const RULINES =
     [
         {
             'type': 'non-letter',
-            'initial': 'Ctrl',
-            'shifted': 'Ctrl',
+            'initial': 'Control',
+            'shifted': 'Control',
         },
         {
             'type': 'non-letter',
@@ -679,8 +679,8 @@ const RULINES =
         },
         {
             'type': 'letter',
-            'initial': ' ',
-            'shifted': ' ',
+            'initial': 'spb',
+            'shifted': 'spb',
         },
         {
             'type': 'non-letter',
@@ -704,8 +704,8 @@ const RULINES =
         },
         {
             'type': 'non-letter',
-            'initial': 'Ctrl',
-            'shifted': 'Ctrl',
+            'initial': 'Control',
+            'shifted': 'Control',
         },
     ]
 ]
@@ -723,6 +723,9 @@ function createKeys(line, number) {
     let elText = document.createElement("p");
     elText.setAttribute("class", "letter-text");
     elText.innerHTML = isShifted ? elem.shifted : elem.initial;
+    if (elem.shifted === "Control") {
+      elText.innerHTML = "Ctrl";
+    }
 
     if (elem.type.includes("non-letter")) {
       newEl.addEventListener("click", doCommand);
@@ -741,19 +744,32 @@ function createKeys(line, number) {
               newEl.classList.add("shift");
               break;
 
-      case (elText.innerHTML.includes("Del") 
+      case (elText.innerHTML.includes("Delete") 
               || elText.innerHTML.includes("Tab")):
               newEl.classList.add("tab");
               break;
           
-      case (elText.innerHTML.includes("↑")
-            || elText.innerHTML.includes("←")
-            || elText.innerHTML.includes("→")
-            || elText.innerHTML.includes("↓")):
-              newEl.classList.add("arrow");
-              break;
+      case (elText.innerHTML.includes("↑")):
+        newEl.classList.add("arrow");
+        newEl.setAttribute("id", "ArrowUp");
+        break;
 
-      case (elText.innerHTML.includes(" ")):
+      case (elText.innerHTML.includes("←")):
+        newEl.classList.add("arrow");
+        newEl.setAttribute("id", "ArrowLeft");
+        break;
+
+      case (elText.innerHTML.includes("→")):
+        newEl.classList.add("arrow");
+        newEl.setAttribute("id", "ArrowRight");
+        break;
+
+      case(elText.innerHTML.includes("↓")):
+        newEl.classList.add("arrow");
+        newEl.setAttribute("id", "ArrowDown");
+        break;
+
+      case (elText.innerHTML.includes("spb")):
             newEl.classList.add("spb");
             elText.innerHTML = " ";
             break;
@@ -787,11 +803,21 @@ mapKeys();
 
 function typeALetter(event) {
   if (event.target.classList.contains("letter")) {
-      displayedText += event.target.id;
+      displayedText += event.target.id === "spb" ? " " : event.target.id;
   } else {
-      displayedText += event.target.parentNode.id;
+      displayedText += event.target.parentNode.id === "spb" ? " " : event.target.parentNode.id;
   }
   document.querySelector(".screen").value = displayedText;
+}
+
+function implementCapslock() {
+  isShifted =!isShifted;
+    mapKeys();
+    if (isShifted) {
+      document.querySelector("#CapsLock").classList.add("non-letter-active");
+    } else {
+      document.querySelector("#CapsLock").classList.remove("non-letter-active");
+    }
 }
 
 function doCommand(event) {
@@ -805,11 +831,7 @@ function doCommand(event) {
   //capslock button
   if (event.target.id === "CapsLock" 
       || event.target.parentNode.id === "CapsLock") {
-        isShifted =!isShifted;
-        mapKeys();
-        if (isShifted) {
-          document.querySelector("#CapsLock").classList.add("non-letter-active");
-        } else document.querySelector("#CapsLock").classList.remove("non-letter-active");
+        implementCapslock();
     }
 
   //backspace button
@@ -840,3 +862,66 @@ document.addEventListener('keydown', function(event) {
 		localStorage.setItem("language", currentLanguage);
   }
 });
+
+document.addEventListener('keydown', function(event) {
+  let letterNumberReg = currentLanguage === 'ru' ? /^[а-яА-ЯёЁ0-9]$/ : /^[a-zA-Z0-9]$/;
+  let targetSymbol = event.key;
+  if (letterNumberReg.test(targetSymbol)) {
+    console.log('Буква или цифра: ' + targetSymbol);
+    document.querySelector(`#${targetSymbol}`).classList.add("letter-active");
+    displayedText += targetSymbol;
+  } else {
+    console.log('Служебная клавиша: ' + targetSymbol);
+    switch(targetSymbol) {
+      case "Tab":
+        event.preventDefault();
+        displayedText += '    ';
+        break;
+
+      case "CapsLock":
+        implementCapslock();
+        break;
+
+      case " ":
+        displayedText += " ";
+        targetSymbol = "spb";
+        
+      case "ArrowUp":
+        displayedText += "↑";
+        break;
+
+      case "ArrowDown":
+        displayedText += "↓";
+        break;  
+
+      case "ArrowLeft":
+        displayedText += "←";
+        break;  
+
+      case "ArrowRight":
+        displayedText += "→";
+        break;  
+
+      default:
+        break;
+    } 
+
+    if (targetSymbol != "CapsLock") {
+      document.querySelector(`#${targetSymbol}`).classList.add("non-letter-active");
+
+    }
+
+  }
+  document.querySelector(".screen").value = displayedText;
+});
+
+document.addEventListener('keyup', function(event) {
+  if (event.key === " ") {
+    document.querySelector("#spb").classList.remove("non-letter-active");
+  } else if (document.querySelector(`#${event.key}`).classList.contains("letter-active")) {
+    document.querySelector(`#${event.key}`).classList.remove("letter-active");
+  } else if (document.querySelector(`#${event.key}`).classList.contains("non-letter-active") && event.key != "CapsLock") {
+    
+    document.querySelector(`#${event.key}`).classList.remove("non-letter-active");
+  }
+}) 

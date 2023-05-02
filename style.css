@@ -67,6 +67,11 @@
     transition: background-color 0.5s, transform 0.2s;
 }
 
+.letter-active {
+    background-color: #23e223;
+    transform: scale(90%);
+}
+
 .letter:hover {
     cursor: pointer;
     background-color: #23e223;
