@@ -13,6 +13,7 @@ function createKeyboardWithLines() {
     line.setAttribute('class', `line line${i}`);
     keyboard.appendChild(line);
   }
+  keyboard.addEventListener("mousedown", playTypingSound);
   return keyboard;
 }
 
@@ -716,6 +717,19 @@ function mapShiftedKeys() {
   mapKeys();
 }
 
+function playTypingSound(event) {
+    if (event.target.classList.contains("letter") 
+        || event.target.classList.contains("non-letter")
+        || event.target.parentNode.classList.contains(".letter")
+        || event.target.parentNode.classList.contains(".non-letter")
+    ) {
+        typingSound.currentTime = 0;
+        typingSound.play();
+        console.log("SOUND PLAYED!");
+    }
+    
+}
+
 function createKeys(line, number) {
   line.forEach( elem => {
     let newEl = document.createElement("div");
@@ -736,11 +750,7 @@ function createKeys(line, number) {
       }
     } else newEl.addEventListener("click", typeALetter);
 
-    newEl.addEventListener("click", () => {
-        typingSound.currentTime = 0;
-        typingSound.play();
-        console.log("SOUND PLAYED!");
-    })
+    // newEl.addEventListener("click", playTypingSound);
 
     switch(true) {
       case (elText.innerHTML.includes("Enter")):
@@ -829,7 +839,7 @@ function implementCapslock() {
 }
 
 function doCommand(event) {
-
+    console.log("doCommand");
     //Enter
     if (event.target.classList.contains("enter") 
       || event.target.parentNode.classList.contains("enter")) {
@@ -875,30 +885,37 @@ function doCommand(event) {
                 displayedText += "→";
                 break;
         }
-
-    
   } else {
     if (event.target.parentNode.classList.contains("arrow")) {
       displayedText += event.target.innerHTML;
     }
   }
 document.querySelector(".screen").value = displayedText;
+
+}
+
+function changeLanguage(event) {
+    if (event.ctrlKey && event.altKey) {
+        console.log('Строка для вывода в консоль');
+            currentLanguage = currentLanguage === "eng" ? "ru" : "eng";
+            mapKeys();
+            localStorage.setItem("language", currentLanguage);
+      }
+    document.querySelector(".screen").focus();
+    console.log("язык изменен, текущий язык ", currentLanguage)
 }
 
 document.addEventListener('keydown', function(event) {
-  if (event.ctrlKey && event.altKey) {
-    console.log('Строка для вывода в консоль');
-		currentLanguage = currentLanguage === "eng" ? "ru" : "eng";
-		mapKeys();
-		localStorage.setItem("language", currentLanguage);
-  }
+    changeLanguage(event);
+
 });
 
 document.addEventListener('keydown', function(event) {
-  let letterNumberReg = currentLanguage === 'ru' ? /^[а-яА-ЯёЁ0-9]$/ : /^[a-zA-Z0-9]$/;
-  let targetSymbol = event.key;
+  const letterNumberReg = currentLanguage === 'ru' ? /^[а-яА-ЯёЁ0-9]$/ : /^[a-zA-Z0-9]$/;
+  const targetSymbol = event.key;
   if (letterNumberReg.test(targetSymbol)) {
     console.log('Буква или цифра: ' + targetSymbol);
+    console.log( document.querySelector("#1"));
     document.querySelector(`#${targetSymbol}`).classList.add("letter-active");
     displayedText += targetSymbol;
   } else {
@@ -909,13 +926,23 @@ document.addEventListener('keydown', function(event) {
         displayedText += '    ';
         break;
 
+    case "Enter":
+        displayedText += "\n";
+        break;
+
       case "CapsLock":
         implementCapslock();
         break;
 
+    case "Backspace": 
+        let cutString = displayedText.slice(0, -1);
+        displayedText = cutString;
+        break;
+
       case " ":
         displayedText += " ";
-        targetSymbol = "spb";
+        // targetSymbol = "spb";
+        displayedText += " ";
         
       case "arrowUp":
         displayedText += "↑";
@@ -934,6 +961,7 @@ document.addEventListener('keydown', function(event) {
         break;  
 
       default:
+        displayedText += "";
         break;
     } 
 
