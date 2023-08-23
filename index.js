@@ -33,7 +33,7 @@ function createDom() {
   
   const notes = document.createElement('p');
     notes.setAttribute('class', 'notes');
-    notes.innerHTML = 'Создано на ОС Windows <br> Для смены языка используйте левые ctrl+ alt';
+    notes.innerHTML = 'Created on Windows OS <br>left ctrl+ alt for language switch';
     mainContainer.appendChild(notes);
 
 }

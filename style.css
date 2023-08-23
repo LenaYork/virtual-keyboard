@@ -5,13 +5,14 @@
     align-items: center;
     width: 800px;
     height: 90vh;
-    background-color: #b3f8b3;
-    border: 1px solid #057905;
+    background-color: #68ec68;
+    background: linear-gradient(82deg, rgba(151,233,151,1) 0%, rgba(51,190,51,1) 39%, rgba(15,148,15,1) 100%);    border: 1px solid #057905;
     border-radius: 15px;
 }
 
 .title {
     text-align: center;
+    text-shadow: 1px 1px #62e222;
     color: #185a04;
 }
 
@@ -20,7 +21,7 @@
     color: #194105;
     font-weight: bolder;
     font-size: smaller;
-    font-style: italic;
+    text-shadow: 1px 1px #62e222;
 }
 
 .screen {
@@ -48,7 +49,6 @@
 }
 
 .line {
-    /* border: 1px solid red; */
     height: 50px;
     margin: 5px 10px;
     display: flex;
@@ -64,7 +64,20 @@
     background-color: silver;
     border: 1px solid #7a7777;
     border-radius: 5px;
-    transition: background-color 0.5s, transform 0.2s;
+    box-shadow: 4px 0px 3px 2px #1e291e;
+    transition: background-color 0.5s, transform 0.2s, outline 0.2s;
+}
+
+.letter:hover, .hover:focus {
+    cursor: pointer;
+    background-color: #4bf34b;
+    outline: 3px solid lime;
+    transition: 0.3s;
+}
+
+.letter:active {
+    border: 1px solid #02490b;
+    transform: scale(95%);
 }
 
 .letter-active {
@@ -72,19 +85,9 @@
     transform: scale(90%);
 }
 
-.letter:hover {
-    cursor: pointer;
-    background-color: #23e223;
-}
-
-.letter:hover, .non-letter:hover {
+.non-letter:hover, .non-letter:focus {
     cursor: pointer;
     background-color: #37ea37;
-}
-
-.letter:active {
-    border: 1px solid #02490b;
-    transform: scale(95%);
 }
 
 .non-letter:active {
@@ -106,6 +109,8 @@
     background-color: #1c1a1a;
     border: 1px solid #2d2b2b;
     border-radius: 5px;
+    box-shadow: 4px 0px 3px 2px #667a66;
+    /* background-image: linear-gradient(to bottom, #393434, #1a0606); */
     transition: background-color 0.5s, transform 0.2s;
 } 
 
