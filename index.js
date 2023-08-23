@@ -739,6 +739,7 @@ function createKeys(line, number) {
     newEl.addEventListener("click", () => {
         typingSound.currentTime = 0;
         typingSound.play();
+        console.log("SOUND PLAYED!");
     })
 
     switch(true) {
@@ -757,22 +758,23 @@ function createKeys(line, number) {
           
       case (elText.innerHTML.includes("↑")):
         newEl.classList.add("arrow");
-        newEl.setAttribute("id", "ArrowUp");
+        newEl.setAttribute("id", "arrowUp");
+        
         break;
 
       case (elText.innerHTML.includes("←")):
         newEl.classList.add("arrow");
-        newEl.setAttribute("id", "ArrowLeft");
+        newEl.setAttribute("id", "arrowLeft");
         break;
 
       case (elText.innerHTML.includes("→")):
         newEl.classList.add("arrow");
-        newEl.setAttribute("id", "ArrowRight");
+        newEl.setAttribute("id", "arrowRight");
         break;
 
       case(elText.innerHTML.includes("↓")):
         newEl.classList.add("arrow");
-        newEl.setAttribute("id", "ArrowDown");
+        newEl.setAttribute("id", "arrowDown");
         break;
 
       case (elText.innerHTML.includes("spb")):
@@ -847,10 +849,27 @@ function doCommand(event) {
         displayedText = cutString;
     }
 
-  if (event.target.classList.contains("non-letter")) {
-    if (event.target.classList.contains("arrow")) {
-      displayedText += event.target.id;
-    }
+    //arrows
+  if (event.target.classList.contains("non-letter") && event.target.classList.contains("arrow")) {
+    
+        switch(event.target.id) {
+            case "arrowUp":
+                displayedText += "↑";
+                break;
+
+            case "arrowDown":
+                displayedText += "↓";
+                break;
+
+            case "arrowLeft":
+                displayedText += "←";
+                break;
+            
+            case "arrowRight":
+                displayedText += "→";
+                break;
+        }
+
     
   } else {
     if (event.target.parentNode.classList.contains("arrow")) {
@@ -892,19 +911,19 @@ document.addEventListener('keydown', function(event) {
         displayedText += " ";
         targetSymbol = "spb";
         
-      case "ArrowUp":
+      case "arrowUp":
         displayedText += "↑";
         break;
 
-      case "ArrowDown":
+      case "arrowDown":
         displayedText += "↓";
         break;  
 
-      case "ArrowLeft":
+      case "arrowLeft":
         displayedText += "←";
         break;  
 
-      case "ArrowRight":
+      case "arrowRight":
         displayedText += "→";
         break;  
 
