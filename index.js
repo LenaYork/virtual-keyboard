@@ -1,5 +1,6 @@
 let currentLanguage =  localStorage.getItem("language") ?? 'eng';
 let isShifted = false;
+const typingSound = new Audio("./typingSound.mp3");
 
 let displayedText = '';
 
@@ -734,6 +735,10 @@ function createKeys(line, number) {
         newEl.addEventListener("mouseup", mapShiftedKeys);
       }
     } else newEl.addEventListener("click", typeALetter);
+
+    newEl.addEventListener("click", () => {
+        typingSound.play();
+    })
 
     switch(true) {
       case (elText.innerHTML.includes("Enter")):

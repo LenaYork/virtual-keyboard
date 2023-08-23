@@ -98,6 +98,7 @@
 .letter-text {
     margin: 0 auto;
     color: #4c4c06;
+    user-select: none;
 }
 
 .non-letter {
