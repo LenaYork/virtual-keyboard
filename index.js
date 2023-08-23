@@ -830,6 +830,12 @@ function implementCapslock() {
 
 function doCommand(event) {
 
+    //Enter
+    if (event.target.classList.contains("enter") 
+      || event.target.parentNode.classList.contains("enter")) {
+        displayedText += '\n';
+    }
+
   //tab button
   if (event.target.classList.contains("tab") 
       || event.target.parentNode.classList.contains("tab")) {
