@@ -737,6 +737,7 @@ function createKeys(line, number) {
     } else newEl.addEventListener("click", typeALetter);
 
     newEl.addEventListener("click", () => {
+        typingSound.currentTime = 0;
         typingSound.play();
     })
 
